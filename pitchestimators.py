@@ -33,7 +33,7 @@ class PitchValues(object):
 		return self.YINdetector(samples)[0]
 
 	def handleCREPE(self, samples):
-		return crepe.predict(samples, audioparams["FS"], viterbi = True)
+		return crepe.predict(samples, audioparams["FS"], viterbi = True)[1][0]
 
 	def audioloop(self):
 

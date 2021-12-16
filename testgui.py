@@ -21,7 +21,7 @@ pygame.init()
 pygame.font.init()
 screenWidth, screenHeight = 1000, 800
 screen = pygame.display.set_mode((screenWidth, screenHeight))
-zIcon = pygame.image.load('/Users/zeanix/Desktop/SMC/Sem9Proj/Graphics/zicon.ico')
+zIcon = pygame.image.load('Graphics/zicon.ico')
 pygame.display.set_icon(zIcon)
 pygame.display.set_caption('Pitch Tracking Comparison')
 clock = pygame.time.Clock()
@@ -165,8 +165,8 @@ while running:
 
 	f0_val_yin = pe.handleYIN(samples)
 	note_val_yin = nv.get_note_info(f0_val_yin)
-	#f0_val_crepe = pe.handleCREPE(samples)
-	#note_val_crepe = nv.get_note_info(f0_val_crepe)
+	f0_val_crepe = pe.handleCREPE(samples)
+	note_val_crepe = nv.get_note_info(f0_val_crepe)
 	#data_np = np.array(samples, dtype = 'b') + 128
 
 	#print("min: %d, max: %d" % (min(data_int), max(data_int)))
