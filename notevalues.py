@@ -2,6 +2,8 @@ import numpy as np
 from pitchestimators import PitchValues
 from threading import Thread
 
+# All of the precise note frequency values...
+# ...from note C, octave 0 to D#/Eb 11 (max audibility)
 freqs = np.array([
 	16.35, 17.32, 18.35, 19.45, 20.6, 21.83, 
 	23.12, 24.5, 25.96, 27.5, 29.14, 30.87, 
@@ -25,6 +27,7 @@ freqs = np.array([
 	11175.3, 11839.82, 12543.86, 13289.75, 14080, 14917.24, 
 	15804.26, 16744.04, 17739.69, 18794.55, 19912.13])
 
+# Defining notes, including unicode sharp and flat
 STR_2_UNICODE_NOTE = {
 	'C': 0,
 	'C' + u'\u266f' + '/' + 'D' + u'\u266d': 1,
@@ -41,6 +44,7 @@ STR_2_UNICODE_NOTE = {
 
 NOTES_IN_OCT = 12
 
+# Generating note and frequency value relationship
 def get_note_info(pitch):
 	fdiff = np.abs(freqs - pitch)
 	idx   = np.argmin(fdiff)
@@ -52,6 +56,7 @@ def get_note_info(pitch):
 		v: k for k, v in STR_2_UNICODE_NOTE.items()}
 	return flipped[note_num] + " (%s)"%octave, diff_to_return, desired_freq
 
+# Primary function to generate note values
 def main():
 	pv = PitchValues()
 	t = Thread(target=pv.audioloop)

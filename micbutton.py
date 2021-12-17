@@ -13,6 +13,7 @@ class MicButton():
 	def draw(self, surface):
 		action = False
 
+		# Checks position of cursor for button click
 		pos = pygame.mouse.get_pos()
 
 		if self.rect.collidepoint(pos):

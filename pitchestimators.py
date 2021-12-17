@@ -5,6 +5,7 @@ import pyaudio
 import queue
 import time
 
+# Audio parameters
 audioparams = {
 	"FS": 44100,
 	"channels": 1,
@@ -14,6 +15,7 @@ audioparams = {
 class PitchValues(object):
 	def __init__(self):
 
+		# Initializes aubio YIN pitch estimation
 		self.YINdetector = aubio.pitch(
 			"default", audioparams["buffersize"], audioparams["buffersize"], audioparams["FS"])
 		self.YINdetector.set_unit("Hz")
@@ -22,9 +24,11 @@ class PitchValues(object):
 	def handleYIN(self, samples):
 		return self.YINdetector(samples)[0]
 
+	# Accesses CREPE data
 	def handleCREPE(self, samples):
 		return crepe.predict(samples, audioparams["FS"], viterbi = True)[1][0]
 
+	# Extracts and evaluates audio signal and queues it
 	def audioloop(self):
 
 		while True:
@@ -35,6 +39,7 @@ class PitchValues(object):
 			pitchYIN = self.handleYIN(samples)
 			pitchCREPE = self.handleCREPE(samples)
 
+			# Computes the energy (volume) of the current frame
 			volume = np.sum(samples**2)/len(samples) * 100
 
 			if not pitchYIN or volume < audioparams["volume_thresh"]:

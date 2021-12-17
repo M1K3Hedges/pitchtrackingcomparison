@@ -20,7 +20,7 @@ pygame.init()
 pygame.font.init()
 screenWidth, screenHeight = 1000, 800
 screen = pygame.display.set_mode((screenWidth, screenHeight))
-zIcon = pygame.image.load('Graphics/zicon.ico')
+zIcon = pygame.image.load('Graphics/ptcicon.png')
 pygame.display.set_icon(zIcon)
 pygame.display.set_caption('Pitch Tracking Comparison')
 clock = pygame.time.Clock()
@@ -35,6 +35,7 @@ fontOther = pygame.font.SysFont('Helvetica Neue', 34)
 
 pe = pitchestimators.PitchValues()
 
+# Audio initilize and parameters
 audioparams = {
 	"FS": 44100,
 	"channels": 1,
@@ -50,15 +51,15 @@ stream = p.open(
 	output = True,
 	frames_per_buffer = audioparams["buffersize"])
 
-global is_on
-is_on = True
+# For mic switch
+#global is_on
+#is_on = True
 
 # Set up matplotlib
 fig = pylab.figure(figsize = [6.3, 2], dpi = 100)
 
 # Variable plotting
 wf_samp  = np.arange(0, 2 * audioparams["buffersize"], 2)
-#spec_freq = np.linspace(0, FS, FRAME_SIZE)
 
 ax = fig.gca()
 line, = ax.plot(wf_samp, np.random.rand(audioparams["buffersize"]), '_', lw = 2)
@@ -66,21 +67,14 @@ ax.set_ylim(-1, 1)
 ax.set_xlim(0, audioparams["buffersize"])
 ax.plot([1, 2, 4])
 
-f0_val_yin = 17792.13
-note_val_yin = 'A' + u'\u266f' + '/' + 'B' + u'\u266d'
-fDiff_yin = 0
-des_freq_yin = 0
-f0_val_crepe = 17798.55
-note_val_crepe = 'A' + u'\u266f' + '/' + 'B' + u'\u266d'
-fDiff_crepe = 0
-des_freq_crepe = 0
-
+# Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 DARKRED = (127, 0, 0)
 
+# GUI Static text
 def static_text():
 	screenTitle = fontTitle.render("PITCH TRACKING COMPARISON", True, WHITE)
 	titleRect = screenTitle.get_rect(center = (screenWidth/2, screenHeight - 750))
@@ -99,6 +93,7 @@ def static_text():
 	tableLine1 = pygame.draw.rect(screen, WHITE, (500, 370, 400, 6))
 	tableLine1 = pygame.draw.rect(screen, WHITE, (500, 540, 400, 6))
 
+# GUI text that updates values and notes
 def update_text():
 
 	f0_val_yin_update = fontOther.render('{0:.2f}'.format(f0_val_yin), True, WHITE)
@@ -111,6 +106,8 @@ def update_text():
 	screen.blit(f0_val_crepe_update, (500, 600))
 	screen.blit(note_crepe_update, (714, 600))
 
+# Initially, the mic button would switch audio on and off...
+# ...but for now it will be a static image
 def mic_Button():
 
 
@@ -132,7 +129,8 @@ def mic_Button():
 
 	screen.blit(micOn, (50, 100))
 	
-
+# Graphic representation of how close the...
+# ...audio signal is to a note frequency
 def tracking_Circles():
 
 	freq_percent_yin = des_freq_yin * 0.01
@@ -160,6 +158,7 @@ def tracking_Circles():
 		screen.blit(underCirc_G, (287, 540))
 		screen.blit(circ_G, (287, 540))
 
+# Main loop. Streams audio and updates text and graphics
 running = True
 while running:
 	screen.fill((BLACK))
@@ -174,13 +173,15 @@ while running:
 	# Convert data to integers
 	samples = np.fromstring(data, dtype = np.float32)
 
+	# Fundamental frequency and note values
 	f0_val_yin = pe.handleYIN(samples)
 	note_val_yin, fDiff_yin, des_freq_yin = nv.get_note_info(f0_val_yin)
 	f0_val_crepe = pe.handleCREPE(samples)
-	note_val_crepe = nv.get_note_info(f0_val_crepe)
+	note_val_crepe, fDiff_crepe, des_freq_crepe = nv.get_note_info(f0_val_crepe)
 
 	line.set_ydata(samples)
 
+	# Renders matplotlib graphic to GUI
 	canvas = agg.FigureCanvasAgg(fig)
 	canvas.draw()
 	renderer = canvas.get_renderer()
@@ -190,6 +191,7 @@ while running:
 	surf = pygame.image.fromstring(raw_data, size, "RGB")
 	screen.blit(surf, (270, 100))
 
+	# Updates all functions for running in pygame environment
 	static_text()
 	update_text()
 	mic_Button()
@@ -197,5 +199,6 @@ while running:
 	pygame.display.update()
 	clock.tick(60)
 
+# Closes audio stream upon exit
 stream.stop_stream()
 stream.close()
