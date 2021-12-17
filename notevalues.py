@@ -44,11 +44,13 @@ NOTES_IN_OCT = 12
 def get_note_info(pitch):
 	fdiff = np.abs(freqs - pitch)
 	idx   = np.argmin(fdiff)
+	diff_to_return = (freqs - pitch)[idx]
+	desired_freq = freqs[idx]
 	note_num = idx % NOTES_IN_OCT
 	octave   = idx // NOTES_IN_OCT
 	flipped = {
 		v: k for k, v in STR_2_UNICODE_NOTE.items()}
-	return flipped[note_num] + " (%s)"%octave
+	return flipped[note_num] + " (%s)"%octave, diff_to_return, desired_freq
 
 def main():
 	pv = PitchValues()

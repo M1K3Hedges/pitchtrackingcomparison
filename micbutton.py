@@ -1,7 +1,7 @@
 import pygame
 
 class MicButton():
-	def __init__(self, x, y, image, scale):
+	def __init__(self, x, y, image, scale, command):
 		width = image.get_width()
 		height = image.get_height()
 		self.image = pygame.transform.scale(image, 
@@ -13,15 +13,17 @@ class MicButton():
 	def draw(self, surface):
 		action = False
 
-		pos = pygame.mous.get_pos()
+		pos = pygame.mouse.get_pos()
 
 		if self.rect.collidepoint(pos):
 			if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
 				self.clicked = True
 				action = True
+				print("On")
 
 		if pygame.mouse.get_pressed()[0] == 0:
 			self.clicked = False
+			print("Off")
 
 		surface.blit(self.image, (self.rect.x, self.rect.y))
 

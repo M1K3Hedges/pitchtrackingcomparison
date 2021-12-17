@@ -13,16 +13,6 @@ audioparams = {
 
 class PitchValues(object):
 	def __init__(self):
-		# Initialize audio 
-		# p = pyaudio.PyAudio()
-		# self.q = queue.Queue()
-		# self.stream = p.open(
-		# 	format = pyaudio.paFloat32,
-		# 	channels = audioparams["channels"],	# Mono
-		# 	rate = audioparams["FS"],	# Sampling Rate
-		# 	input = True,
-		# 	frames_per_buffer = audioparams["buffersize"])	# Frame Size
-		# time.sleep(1)
 
 		self.YINdetector = aubio.pitch(
 			"default", audioparams["buffersize"], audioparams["buffersize"], audioparams["FS"])
@@ -45,8 +35,6 @@ class PitchValues(object):
 			pitchYIN = self.handleYIN(samples)
 			pitchCREPE = self.handleCREPE(samples)
 
-			# Compute the energy (volume) of the
-			# current frame.
 			volume = np.sum(samples**2)/len(samples) * 100
 
 			if not pitchYIN or volume < audioparams["volume_thresh"]:
