@@ -11,4 +11,5 @@ yinAtempt.py was an attempt to replicate the YIN algorithm as it is described in
 setup.py allows for the python file to be converted into a .dmg file.
 
 [1] De Cheveigné, A., & Kawahara, H. (2002). YIN, a fundamental frequency estimator for speech and music. The Journal of the Acoustical Society of America, 111(4), 1917-1930. https://doi.org/10.1121/1.1458024
+
 [2] Kim, J. W., Salamon, J., Li, P., & Bello, J. P. (2018, April). Crepe: A convolutional representation for pitch estimation. In 2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 161-165). IEEE. https://doi.org/10.1109/ICASSP.2018.8461329
