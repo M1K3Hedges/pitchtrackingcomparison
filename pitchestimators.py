@@ -45,6 +45,9 @@ class PitchValues(object):
 			if not pitchYIN or volume < audioparams["volume_thresh"]:
 				continue
 
+			if not pitchCREPE or volume < audioparams["volume_thresh"]:
+				continue
+
 			self.q.put({"yin": pitchYIN, "crepe": pitchCREPE})
 
 	def close(self):
